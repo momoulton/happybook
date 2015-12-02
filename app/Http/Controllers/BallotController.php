@@ -76,7 +76,7 @@ class BallotController extends Controller {
     /**
      * Responds to requests to GET /ballots/tally/{id}
      */
-    public function getVote($id) {
+    public function getTally($id) {
         return 'Here are the results on this ballot '.$id;
     }
 }

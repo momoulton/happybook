@@ -18,7 +18,7 @@ class MeetingController extends Controller {
     }
 
     /**
-     * Responds to requests to GET /meetings/show/{id}
+     * Responds to requests to GET /meetings/show/{date}
      */
     public function getShow($date) {
         return 'Show meeting: '.$date;

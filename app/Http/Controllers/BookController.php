@@ -39,7 +39,7 @@ class BookController extends Controller {
     }
 
     /**
-     * Responds to requests to GET /books/edit
+     * Responds to requests to GET /books/edit/{id}
      */
     public function getEdit($id) {
         return 'Edit a book '.$id;
