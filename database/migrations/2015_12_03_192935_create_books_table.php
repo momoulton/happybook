@@ -30,9 +30,6 @@ class CreateBooksTable extends Migration
           $table->string('purchase_link');
           $table->string('image_link');
           $table->boolean('already_read');
-
-          # FYI: We're skipping the 'tags' field for now; more on that later.
-
       });
     }
 
