@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BallotsTableSeeder.php extends Seeder
+class BallotsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

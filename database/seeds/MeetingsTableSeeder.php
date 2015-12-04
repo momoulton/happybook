@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class MeetingsTableSeeder.php extends Seeder
+class MeetingsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BooksTableSeeder.php extends Seeder
+class BooksTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
