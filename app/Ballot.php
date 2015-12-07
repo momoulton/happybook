@@ -11,4 +11,9 @@ class Ballot extends Model
         # Define an inverse one-to-one relationship.
         return $this->belongsTo('\App\Meeting');
     }
+
+    public function books() {
+      #Ballots and Books have Many to Many relationship
+      return $this->belongsToMany('\App\Book')->withTimeStamps();
+    }
 }
