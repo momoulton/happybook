@@ -67,6 +67,24 @@ Route::post('/ballots/vote/{id}', 'BallotController@postVote');
 
 Route::get('/ballots/tally/{id}', 'BallotController@getTally');
 
+// user authentication
+
+# Show login form
+Route::get('/login', 'Auth\AuthController@getLogin');
+
+# Process login form
+Route::post('/login', 'Auth\AuthController@postLogin');
+
+# Process logout
+Route::get('/logout', 'Auth\AuthController@getLogout');
+
+# Show registration form
+Route::get('/register', 'Auth\AuthController@getRegister');
+
+# Process registration form
+Route::post('/register', 'Auth\AuthController@postRegister');
+
+// debug route
 
 Route::get('/debug', function() {
 
