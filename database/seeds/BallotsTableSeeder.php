@@ -11,34 +11,39 @@ class BallotsTableSeeder extends Seeder
      */
     public function run()
     {
+        $meeting_id = \App\Meeting::where('meeting_date','=','2015-12-20')->pluck('id');
         DB::table('ballots')->insert([
           'created_at' => Carbon\Carbon::now()->toDateTimeString(),
           'updated_at' => Carbon\Carbon::now()->toDateTimeString(),
-          'meeting_id' => 1,
+          'meeting_id' => $meeting_id,
         ]);
 
+        $meeting_id = \App\Meeting::where('meeting_date','=','2016-1-20')->pluck('id');
         DB::table('ballots')->insert([
           'created_at' => Carbon\Carbon::now()->toDateTimeString(),
           'updated_at' => Carbon\Carbon::now()->toDateTimeString(),
-          'meeting_id' => 2,
+          'meeting_id' => $meeting_id,
         ]);
 
+        $meeting_id = \App\Meeting::where('meeting_date','=','2016-2-20')->pluck('id');
         DB::table('ballots')->insert([
           'created_at' => Carbon\Carbon::now()->toDateTimeString(),
           'updated_at' => Carbon\Carbon::now()->toDateTimeString(),
-          'meeting_id' => 3,
+          'meeting_id' => $meeting_id,
         ]);
 
+        $meeting_id = \App\Meeting::where('meeting_date','=','2016-3-20')->pluck('id');
         DB::table('ballots')->insert([
           'created_at' => Carbon\Carbon::now()->toDateTimeString(),
           'updated_at' => Carbon\Carbon::now()->toDateTimeString(),
-          'meeting_id' => 4,
+          'meeting_id' => $meeting_id,
         ]);
 
+        $meeting_id = \App\Meeting::where('meeting_date','=','2016-4-20')->pluck('id');
         DB::table('ballots')->insert([
           'created_at' => Carbon\Carbon::now()->toDateTimeString(),
           'updated_at' => Carbon\Carbon::now()->toDateTimeString(),
-          'meeting_id' => 5,
+          'meeting_id' => $meeting_id,
         ]);
     }
 }
