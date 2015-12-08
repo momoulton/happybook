@@ -1,4 +1,5 @@
 body {
+  padding-left: 20px;
   margin-left: 10%;
   margin-right: 10%;
   font-family: "Garamond", serif;
@@ -63,3 +64,17 @@ footer nav ul li a{
 footer nav ul li a:hover{
   color:black;
   text-decoration: none;
+
+/*----------------------------------------------------
+  Flash message
+    -----------------------------------------------------*/
+.flash_message {
+      width:100%;
+      text-align:center;
+      padding:5px;
+      position:fixed;
+      top:0;
+      left:0;
+      background-color:yellow;
+      font-weight:bold;
+  }

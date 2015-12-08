@@ -17,4 +17,13 @@ class Meeting extends Model
       # Define a one-to-one relationship.
       return $this->hasOne('\App\Ballot');
     }
+
+    public function getMeetingsForMenu() {
+      $meetings = $this->orderBy('meeting_date','ASC')->get();
+      $meetingsForMenu = [];
+      foreach($meetings as $meeting) {
+          $meetingsForMenu[$meeting['id']] = $meeting;
+      }
+      return $meetingsForMenu;
+}
 }

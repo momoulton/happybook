@@ -14,6 +14,9 @@
 
 </head>
 <body>
+    @if(Session::get('flash_message') != null)
+      <div class='flash_message'>{{ Session::get('flash_message') }}</div>
+    @endif
 
     <header>
         <h1>The Happy Book Club&#8217;s Book Picker</h1>

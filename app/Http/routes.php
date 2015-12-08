@@ -27,9 +27,9 @@ Route::get('/books/edit/{id}', 'BookController@getEdit');
 
 Route::post('/books/edit/{id}', 'BookController@postEdit');
 
-Route::get('/books/delete/{id}', 'BookController@postDelete');
+Route::get('/books/delete/{id}', 'BookController@getDelete');
 
-Route::post('/books/delete/{id}', 'BookController@postDelete');
+Route::get('/books/do/delete/{id}', 'BookController@getDoDelete');
 
 // meetings routes
 

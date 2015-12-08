@@ -16,4 +16,5 @@ class Ballot extends Model
       #Ballots and Books have Many to Many relationship
       return $this->belongsToMany('\App\Book')->withTimeStamps();
     }
+
 }
