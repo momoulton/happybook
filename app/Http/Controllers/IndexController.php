@@ -14,7 +14,7 @@ class IndexController extends Controller {
     * Responds to requests to GET /
     */
     public function getIndex() {
-        return "home";
+        return view('index');
     }
 
 }
