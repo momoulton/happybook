@@ -14,7 +14,8 @@ class BookController extends Controller {
     * Responds to requests to GET /books
     */
     public function getIndex() {
-        return 'List all the books';
+        $books = \App\Book::orderBy('year','ASC')->get();
+        return view('books.index')->with('books',$books);
     }
 
     /**
@@ -50,6 +51,13 @@ class BookController extends Controller {
      */
     public function postEdit($id) {
         return 'Process editing book '.$id;
+    }
+
+    /**
+     * Responds to requests to GET /books/delete/{id}
+     */
+    public function getDelete($id) {
+        return 'Delete book? '.$id;
     }
 
     /**

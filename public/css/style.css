@@ -24,3 +24,42 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* http://mystrd.at/modern-clean-css-sticky-footer */
+html {
+    position:relative;
+    min-height:100%;
+}
+body {
+    margin:0 0 100px; /* bottom = footer height */
+    font-family: "Garamond", serif;
+}
+footer {
+    position: absolute;
+    left:0;
+    bottom:0;
+    height:30px;
+    width:100%;
+    background-color:#ccc;
+    text-align:center;
+    padding:5px;
+}
+/* End Sticky Footer */
+
+footer nav ul li{
+  display:inline-block;
+  padding:0px 25px 10px;
+}
+
+footer nav ul{
+  margin: 10px 60px 10px 20px;
+}
+
+footer nav ul li a{
+  font-size: 1.5em;
+  text-decoration: none;
+}
+
+footer nav ul li a:hover{
+  color:black;
+  text-decoration: none;

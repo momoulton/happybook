@@ -17,7 +17,6 @@
 
     <header>
         <h1>The Happy Book Club&#8217;s Book Picker</h1>
-        <h2>... with proportional voting!</h2>
     </header>
 
     <section>
@@ -26,8 +25,27 @@
     </section>
 
     <footer>
-        <p><a href="/">Home</a></p>
-        &copy; {{ date('Y') }}
+      <div>
+        <nav>
+          <ul>
+              @if(Auth::check())
+                 <li><a href="/">Home</a></li>
+                 <li><a href='/books' target='_blank'>Books</a></li>
+                 <li><a href="/meetings" target='_blank'>Meetings</a></li>
+                 <li><a href="/ballots" target='_blank'>Ballots</a></li>
+                 <li><a href="/logout" target='_blank'>Logout</a></li>
+              @else
+                <li><a href="/">Home</a></li>
+                <li><a href='/books' target='_blank'>Books</a></li>
+                <li><a href="/meetings" target='_blank'>Meetings</a></li>
+                <li><a href="/ballots" target='_blank'>Ballots</a></li>
+                <li><a href="/login" target='_blank'>Login</a></li>
+                <li><a href="/register" target='_blank'>Register</a></li>
+              @endif
+          </ul>
+        </nav>
+      </div>
+
     </footer>
 
     {{-- Yield any page specific JS files or anything else you might want at the end of the body --}}

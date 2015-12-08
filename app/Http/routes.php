@@ -27,6 +27,8 @@ Route::get('/books/edit/{id}', 'BookController@getEdit');
 
 Route::post('/books/edit/{id}', 'BookController@postEdit');
 
+Route::get('/books/delete/{id}', 'BookController@postDelete');
+
 Route::post('/books/delete/{id}', 'BookController@postDelete');
 
 // meetings routes
@@ -43,6 +45,8 @@ Route::get('/meetings/edit/{date}', 'MeetingController@getEdit');
 
 Route::post('/meetings/edit/{date}', 'MeetingController@postEdit');
 
+Route::get('/meetings/delete/{date}', 'MeetingController@postDelete');
+
 Route::post('/meetings/delete/{date}', 'MeetingController@postDelete');
 
 // ballots routes
@@ -58,6 +62,8 @@ Route::post('ballots/create', 'BallotController@postCreate');
 Route::get('/ballots/edit/{id}', 'BallotController@getEdit');
 
 Route::post('/ballots/edit/{id}', 'BallotController@postEdit');
+
+Route::get('/ballots/delete/{id}', 'BallotController@postDelete');
 
 Route::post('/ballots/delete/{id}', 'BallotController@postDelete');
 
