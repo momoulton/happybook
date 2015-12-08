@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class MeetingController extends Controller {
 
@@ -14,28 +15,35 @@ class MeetingController extends Controller {
     * Responds to requests to GET /meetings
     */
     public function getIndex() {
-        return 'List all the meetings';
+      $meetings = \App\Meeting::orderBy('meeting_date','DESC')->get();
+      return view('meetings.index')->with('meetings',$meetings);
     }
 
-    /**
-     * Responds to requests to GET /meetings/show/{date}
-     */
-    public function getShow($date) {
-        return 'Show meeting: '.$date;
-    }
 
     /**
      * Responds to requests to GET /meetings/create
      */
     public function getCreate() {
-        return 'Form to create a new meeting';
+        return view('meetings.create');
     }
 
     /**
      * Responds to requests to POST /meetings/create
      */
-    public function postCreate() {
-        return 'Process adding new meeting';
+    public function postCreate(Request $request) {
+        $this->validate(
+            $request,
+            [
+                'meeting_date' => 'required',
+              ]
+        );
+
+        $meeting = new \App\Meeting();
+        $meeting->meeting_date = $request->meeting_date;
+        $meeting->meeting_details = $request->meeting_details;
+        $meeting->save();
+        \Session::flash('flash_message','Your meeting was added!');
+        return redirect('/meetings');
     }
 
     /**

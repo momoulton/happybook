@@ -42,6 +42,16 @@
       </div>
 
       <div class='form-group'>
+          <label for='description'>Description:</label>
+          <input
+              type='text'
+              id='description'
+              name="description"
+              value='{{ old('description') }}'
+              >
+      </div>
+
+      <div class='form-group'>
           <label for='image_link'>Cover (URL):</label>
           <input
               type='text'
@@ -52,7 +62,7 @@
       </div>
 
       <div class='form-group'>
-          <label for='title'>Where to purchase this book (URL):</label>
+          <label for='purchase_link'>Where to purchase this book (URL):</label>
           <input
               type='text'
               id='purchase_link'
