@@ -16,8 +16,7 @@
                 <h3>{{ $book->author }}, <i>{{ $book->title }}</i> ({{ $book->year }})</h3>
                 <a href='books/show/{{$book->id}}'>Show Details</a> |
                 <a href='/books/edit/{{$book->id}}'>Edit</a> |
-                <a href='/books/delete/{{$book->id}}'>Delete</a> |
-                <a href='/books/edit/{{$book->id}}'>Add to a Ballot</a><br><br>
+                <a href='/books/delete/{{$book->id}}'>Delete</a> <br><br>
             </div>
         @endforeach
     @endif

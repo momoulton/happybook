@@ -7,7 +7,7 @@
 
 @section('content')
 
-    <h1>Edit</h1>
+    <h1>Edit a book</h1>
 
     <form method='POST' action='/books/edit'>
 
@@ -74,16 +74,6 @@
                 value='{{ $book->purchase_link }}'
                 >
         </div>
-
-        <div class='form-group'>
-            <label for='meeting'>Add to Ballot?</label>
-                <br>
-                @foreach($meetings_for_menu as $meeting)
-                    <?php $checked = (in_array($meeting,$meetings_for_this_book)) ? 'CHECKED' : '' ?>
-                    <input {{ $checked }} type='checkbox' name='meetings[]' value='{{ $meeting->meeting_id }}'> {{ $meeting->meeting_date }} <br>
-                @endforeach
-        </div>
-
 
         <br>
         <button type="submit" class="btn btn-primary">Save Changes</button>

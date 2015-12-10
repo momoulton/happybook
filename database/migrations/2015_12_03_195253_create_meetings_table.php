@@ -25,7 +25,7 @@ class CreateMeetingsTable extends Migration
             # The rest of the fields...
             $table->date('meeting_date');
             $table->text('meeting_details');
-            $table->integer('book_id')->unsigned();
+            $table->integer('book_id')->unsigned()->nullable();
             $table->foreign('book_id')->references('id')->on('books');
         });
     }

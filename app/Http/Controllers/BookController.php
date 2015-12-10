@@ -37,10 +37,7 @@ class BookController extends Controller {
      * Responds to requests to GET /books/create
      */
     public function getCreate() {
-        $meetingModel = new \App\Meeting();
-        $meetings_for_menu = $meetingModel->getMeetingsForMenu();
-        return view('books.create')
-            ->with('meetings_for_menu',$meetings_for_menu);
+        return view('books.create');
     }
 
     /**
@@ -64,22 +61,6 @@ class BookController extends Controller {
          $book->image_link = $request->image_link;
          $book->purchase_link = $request->purchase_link;
          $book->save();
-         $all_ballots = \App\Ballot::all();
-         $ballots = [];
-         if($request->meetings) {
-            $meeting_ids = $request->meetings;
-            foreach($all_ballots as $ballot) {
-              foreach($meeting_ids as $meeting_id) {
-                if ($ballot->meeting_id === $meeting_id) {
-                  array_push($ballots, $ballot->id);
-                }
-              }
-            }
-          }
-          else {
-            $ballots = [];
-          }
-          $book->ballots()->sync($ballots);
          # Done
          \Session::flash('flash_message','Your book was added!');
          return redirect('/books');
@@ -89,29 +70,15 @@ class BookController extends Controller {
      * Responds to requests to GET /books/edit/{id}
      */
     public function getEdit($id = null) {
-      $book = \App\Book::with('ballots')->find($id);
+      $book = \App\Book::find($id);
 
       if(is_null($book)) {
         \Session::flash('flash_message','Book not found.');
         return redirect('/books');
       }
 
-      $meetingModel = new \App\Meeting();
-      $meetings_for_menu = $meetingModel->getMeetingsForMenu();
-
-      $meetings_for_this_book = [];
-      foreach($book->ballots as $ballot) {
-          $meeting_id = $ballot->meeting_id;
-          $meeting = \App\Meeting::find($meeting_id);
-          $meetings_for_this_book[$meeting_id] = $meeting;
-      }
-
       return view('books.edit')
-        ->with([
-            'book' => $book,
-            'meetings_for_menu' => $meetings_for_menu,
-            'meetings_for_this_book' => $meetings_for_this_book,
-        ]);
+        ->with(['book' => $book,]);
     }
 
     /**
@@ -135,22 +102,6 @@ class BookController extends Controller {
       $book->image_link = $request->image_link;
       $book->purchase_link = $request->purchase_link;
       $book->save();
-      $all_ballots = \App\Ballot::all();
-      $ballots = [];
-      if($request->meetings) {
-         $meeting_ids = $request->meetings;
-         foreach($all_ballots as $ballot) {
-           foreach($meeting_ids as $meeting_id) {
-             if ($ballot->meeting_id === $meeting_id) {
-               array_push($ballots, $ballot->id);
-             }
-           }
-         }
-       }
-       else {
-         $ballots = [];
-       }
-       $book->ballots()->sync($ballots);
       # Done
       \Session::flash('flash_message',$book->title.' was edited!');
       return redirect('/books');

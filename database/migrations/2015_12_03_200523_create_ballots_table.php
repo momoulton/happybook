@@ -23,7 +23,7 @@ class CreateBallotsTable extends Migration
             $table->timestamps();
 
             # The rest of the fields...
-            $table->integer('meeting_id')->unsigned();
+            $table->integer('meeting_id')->unsigned()->nullable();
             $table->foreign('meeting_id')->references('id')->on('meetings');
         });
     }

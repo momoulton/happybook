@@ -1,16 +1,16 @@
 @extends('layouts.master')
 
 @section('title')
-  Meetings
+  Ballots
 @stop
 
 @section('content')
-  <h2>All Meetings</h2>
-  <p><a href="/meetings/create">Add a new meeting</a></p>
-    @if(sizeof($meetings) == 0)
-        You have not added any meetings.
+  <h2>All Ballots</h2>
+  <p><a href="/meetings/create">Create a new meeting</a></p>
+    @if(sizeof($ballots) == 0)
+        You have not created any ballots.
     @else
-        @foreach($meetings as $meeting)
+        @foreach($ballots as $ballot)
             <div>
                 <h3>{{ $meeting->meeting_date }}</h3>
                 <p>{{ $meeting->meeting_details}}</p>

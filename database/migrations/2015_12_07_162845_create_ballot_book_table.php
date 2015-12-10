@@ -15,8 +15,8 @@ class CreateBallotBookTable extends Migration
         Schema::create('ballot_book', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->integer('ballot_id')->unsigned();
-          $table->integer('book_id')->unsigned();
+          $table->integer('ballot_id')->unsigned()->nullable();
+          $table->integer('book_id')->unsigned()->nullable();
           $table->foreign('ballot_id')->references('id')->on('ballots');
           $table->foreign('book_id')->references('id')->on('books');
         });

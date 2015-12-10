@@ -71,14 +71,6 @@
               >
       </div>
 
-      <div class='form-group'>
-          <label for='meeting'>Add to Ballot?</label>
-              <br>
-              @foreach($meetings_for_menu as $meeting)
-                  <input type='checkbox' name='meetings[]' value='{{ $meeting->meeting_id }}'> {{ $meeting->meeting_date }} <br>
-              @endforeach
-      </div>
-
       <button type="submit" class="btn btn-primary">Add book</button>
   </form>
 

@@ -12,7 +12,6 @@
       <p>{{ $book->description}}</p>
       <a href='{{ $book->purchase_link}}'>Purchase</a><br>
       <a href='/books/edit/{{$book->id}}'>Edit</a> |
-      <a href='/books/delete/{{$book->id}}'>Delete</a><br>
-      <a href='/books/edit/{{$book->id}}'>Add to a Ballot</a><br> <br>
+      <a href='/books/delete/{{$book->id}}'>Delete</a><br> <br>
       <a href='/books'>Back to Book List</a>
 @stop
