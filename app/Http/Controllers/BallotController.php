@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class BallotController extends Controller {
 
@@ -14,49 +15,137 @@ class BallotController extends Controller {
     * Responds to requests to GET /ballots
     */
     public function getIndex() {
-        return 'List all the ballots';
+        $ballots = \App\Ballot::with('meeting')->with('books')->orderBy('id','DESC')->get();
+        return view('ballots.index')->with('ballots',$ballots);
     }
 
-    /**
-     * Responds to requests to GET /ballots/show/{id}
-     */
-    public function getShow($id) {
-        return 'Show ballot: '.$id;
-    }
 
     /**
      * Responds to requests to GET /ballots/create
      */
     public function getCreate() {
-        return 'Form to create a new ballot';
+      $meetingModel = new \App\Meeting();
+      $meetings_for_menu = $meetingModel->getMeetingsForMenu();
+
+      $bookModel = new \App\Book();
+      $books_for_checkbox = $bookModel->getBooksForMenu();
+
+      return view('ballots.create')
+        ->with('meetings_for_menu',$meetings_for_menu)
+        ->with('books_for_checkbox',$books_for_checkbox);
     }
 
     /**
      * Responds to requests to POST /ballots/create
      */
-    public function postCreate() {
-        return 'Process adding new ballot';
+    public function postCreate(Request $request) {
+        $this->validate(
+          $request,
+          [
+              'meeting' => 'required',
+              'books' => 'required',
+          ]
+        );
+
+        $ballot = new \App\Ballot();
+        $ballot->meeting_id = $request->meeting;
+        $ballot->save();
+        if($request->books) {
+            $books = $request->books;
+        }
+        else {
+            $books = [];
+        }
+        $ballot->books()->sync($books);
+        \Session::flash('flash_message','Your ballot was created!');
+        return redirect('/ballots');
     }
 
     /**
      * Responds to requests to GET /ballots/edit/{id}
      */
     public function getEdit($id) {
-        return 'Edit a ballot '.$id;
+        $ballot = \App\Ballot::with('books')->with('meeting')->find($id);
+
+        if(is_null($ballot)) {
+            \Session::flash('flash_message','Ballot not found.');
+            return redirect('\ballots');
+        }
+
+        $meetingModel = new \App\Meeting();
+        $meetings_for_menu = $meetingModel->getMeetingsForMenu();
+
+        $bookModel = new \App\Book();
+        $books_for_checkbox = $bookModel->getBooksForMenu();
+
+        $books_for_ballot = [];
+        foreach($ballot->books as $book) {
+          $books_for_ballot[] = $book->id;
+        }
+
+        return view('ballots.edit')
+          ->with([
+            'ballot' => $ballot,
+            'meetings_for_menu' => $meetings_for_menu,
+            'books_for_checkbox' => $books_for_checkbox,
+            'books_for_ballot' => $books_for_ballot,
+          ]);
     }
 
     /**
      * Responds to requests to POST /ballots/edit/{id}
      */
-    public function postEdit($id) {
-        return 'Process editing ballot '.$id;
+    public function postEdit(Request $request) {
+        $this->validate(
+          $request,
+          [
+              'meeting' => 'required',
+              'books' => 'required',
+          ]
+        );
+
+        $ballot = \App\Ballot::find($request->id);
+        $ballot->meeting_id = $request->meeting;
+        $ballot->save();
+        if($request->books) {
+            $books = $request->books;
+        }
+        else {
+            $books = [];
+        }
+        $ballot->books()->sync($books);
+        \Session::flash('flash_message','Your ballot was updated!');
+        return redirect('/ballots');
     }
 
     /**
-     * Responds to requests to POST /ballots/delete/{id}
+     * Responds to requests to GET /ballots/delete/{id}
      */
-    public function postDelete($id) {
-        return 'Deleting ballot '.$id;
+    public function getDelete($id) {
+        $ballot = \App\Ballot::with('meeting')->with('books')->find($id);
+
+        if(is_null($ballot)) {
+          \Session::flash('flash_message','Ballot not found.');
+          return redirect('/ballots');
+        }
+        return view('ballots.delete')->with('ballot',$ballot);
+    }
+
+    /**
+     * Responds to requests to GET /ballots/do/delete/{id}
+     */
+    public function getDoDelete($id) {
+        $ballot = \App\Ballot::find($id);
+        if(is_null($ballot)) {
+          \Session::flash('flash_message','Ballot not found.');
+          return redirect('/ballots');
+        }
+        if($ballot->books()) {
+          $ballot->books()->detach();
+        }
+        $ballot->delete();
+        \Session::flash('flash_message','Ballot was deleted.');
+        return redirect('/ballots');
     }
 
     /**

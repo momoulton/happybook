@@ -53,19 +53,17 @@ Route::get('/meetings/do/delete/{id}', 'MeetingController@getDoDelete');
 
 Route::get('/ballots', 'BallotController@getIndex');
 
-Route::get('/ballots/show/{id}', 'BallotController@getShow');
-
 Route::get('ballots/create', 'BallotController@getCreate');
 
 Route::post('ballots/create', 'BallotController@postCreate');
 
 Route::get('/ballots/edit/{id}', 'BallotController@getEdit');
 
-Route::post('/ballots/edit/{id}', 'BallotController@postEdit');
+Route::post('/ballots/edit', 'BallotController@postEdit');
 
-Route::get('/ballots/delete/{id}', 'BallotController@postDelete');
+Route::get('/ballots/delete/{id}', 'BallotController@getDelete');
 
-Route::post('/ballots/delete/{id}', 'BallotController@postDelete');
+Route::get('/ballots/do/delete/{id}', 'BallotController@getDoDelete');
 
 Route::get('/ballots/vote/{id}', 'BallotController@getVote');
 

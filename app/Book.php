@@ -16,4 +16,13 @@ class Book extends Model
       #Books have Many to Many Relationship with Ballots
       return $this->belongsToMany('\App\Ballot')->withTimeStamps();
     }
+
+    public function getBooksForMenu() {
+        $books = $this->orderBy('year','ASC')->get();
+        $booksForMenu = [];
+        foreach($books as $book) {
+            $booksForMenu[$book['id']] = $book;
+        }
+        return $booksForMenu;
+    }
 }
