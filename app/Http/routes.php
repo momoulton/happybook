@@ -67,7 +67,7 @@ Route::get('/ballots/do/delete/{id}', 'BallotController@getDoDelete');
 
 Route::get('/ballots/vote/{id}', 'BallotController@getVote');
 
-Route::post('/ballots/vote/{id}', 'BallotController@postVote');
+Route::post('/ballots/vote', 'BallotController@postVote');
 
 Route::get('/ballots/tally/{id}', 'BallotController@getTally');
 

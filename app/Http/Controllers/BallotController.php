@@ -152,14 +152,16 @@ class BallotController extends Controller {
      * Responds to requests to GET /ballots/vote/{id}
      */
     public function getVote($id) {
-        return 'Vote here on this ballot '.$id;
+        $ballot = \App\Ballot::with('meeting')->with('books')->find($id);
+        return view('ballots.vote')->with('ballot',$ballot);
     }
 
     /**
      * Responds to requests to POST /ballots/vote/{id}
      */
-    public function postVote($id) {
-        return 'You voted on ballot '.$id;
+    public function postVote(Request $request) {
+      \Session::flash('flash_message','You have voted!');
+      return redirect('/ballots');
     }
 
     /**
