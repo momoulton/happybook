@@ -17,4 +17,9 @@ class Ballot extends Model
       return $this->belongsToMany('\App\Book')->withTimeStamps();
     }
 
+    # Votes belong to a ballot. One to Many.
+    public function votes() {
+      return $this->hasMany('\App\Vote')->withTimeStamps();
+    }
+
 }

@@ -43,7 +43,7 @@ class BooksTableSeeder extends Seeder
           'year' => 1984,
           'description' => 'In a tower on the New Zealand sea lives Kerewin Holmes, part Maori, part European, an artist estranged from her art, a woman in exile from her family. One night her solitude is disrupted by a visitora speechless, mercurial boy named Simon, who tries to steal from her and then repays her with his most precious possession. As Kerewin succumbs to Simon\'s feral charm, she also falls under the spell of his Maori foster father Joe, who rescued the boy from a shipwreck and now treats him with an unsettling mixture of tenderness and brutality. Out of this unorthodox trinity Keri Hulme has created what is at once a mystery, a love story, and an ambitious exploration of the zone where Maori and European New Zealand meet, clash, and sometimes merge.',
           'purchase_link' => 'http://www.powells.com/book/bone-people-9780140089226/17-69',
-          'image_link' => 'http://covers.powells.com/9780061043574.jpg',
+          'image_link' => 'http://covers.powells.com/9780140089226.jpg',
           'already_read' => 0,
         ]);
 

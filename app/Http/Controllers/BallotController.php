@@ -56,9 +56,15 @@ class BallotController extends Controller {
         else {
             $books = [];
         }
-        $ballot->books()->sync($books);
-        \Session::flash('flash_message','Your ballot was created!');
-        return redirect('/ballots');
+        if (sizeOf($books) > 7) {
+          \Session::flash('flash_message','You may only put up to seven books on a ballot. Please try again.');
+          return back();
+        }
+        else {
+          $ballot->books()->sync($books);
+          \Session::flash('flash_message','Your ballot was created!');
+          return redirect('/ballots');
+        }
     }
 
     /**
@@ -113,9 +119,15 @@ class BallotController extends Controller {
         else {
             $books = [];
         }
-        $ballot->books()->sync($books);
-        \Session::flash('flash_message','Your ballot was updated!');
-        return redirect('/ballots');
+        if (sizeOf($books) > 7) {
+          \Session::flash('flash_message','You may only put up to seven books on a ballot. Please try again.');
+          return back();
+        }
+        else {
+          $ballot->books()->sync($books);
+          \Session::flash('flash_message','Your ballot was updated!');
+          return redirect('/ballots');
+        }
     }
 
     /**
@@ -160,8 +172,65 @@ class BallotController extends Controller {
      * Responds to requests to POST /ballots/vote/{id}
      */
     public function postVote(Request $request) {
-      \Session::flash('flash_message','You have voted!');
-      return redirect('/ballots');
+
+        $this->validate(
+          $request,
+          [
+              'votes' => 'required',
+          ]
+        );
+        $votes = $request->votes;
+        $size = $request->size;
+        $id = $request->id;
+        $books = $request->books;
+        $votes_ok = TRUE;
+        for ($i = 1; $i <= $size; $i++) {
+            if (!in_array($i,$votes)) {
+              $votes_ok = FALSE;
+            }
+        }
+        if (!$votes_ok) {
+          \Session::flash('flash_message','Please check your votes. You must give each book a unique ranking, starting at 1.');
+          return back();
+        }
+        else {
+          $votes_with_books = [];
+          for ($i = 0; $i <= $size-1; $i++) {
+            $this_book = $books[$i];
+            $this_rank = $votes[$i];
+            $votes_with_books["$this_book"] = $this_rank;
+          }
+          $vote = new \App\Vote();
+          $vote->ballot_id = $id;
+          $vote->user_id = \Auth::id();
+          foreach ($votes_with_books as $voted_book_id => $rank) {
+              if ($rank === "1") {
+                $vote->first_choice = $voted_book_id;
+              }
+              else if ($rank === "2") {
+                $vote->second_choice = $voted_book_id;
+              }
+              else if ($rank === "3") {
+                $vote->third_choice = $voted_book_id;
+              }
+              else if ($rank === "4") {
+                $vote->fourth_choice = $voted_book_id;
+              }
+              else if ($rank === "5") {
+                $vote->fifth_choice = $voted_book_id;
+              }
+              else if ($rank === "6") {
+                $vote->sixth_choice = $voted_book_id;
+              }
+              else if ($rank === "7") {
+                $vote->seventh_choice = $voted_book_id;
+              }
+          }
+          // echo dump($votes_with_books);
+          $vote->save();
+          \Session::flash('flash_message','You have voted!');
+          return redirect('/ballots');
+        }
     }
 
     /**
