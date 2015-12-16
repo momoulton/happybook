@@ -237,6 +237,110 @@ class BallotController extends Controller {
      * Responds to requests to GET /ballots/tally/{id}
      */
     public function getTally($id) {
-        return 'Here are the results of this ballot '.$id;
+      $ballot = \App\Ballot::with('meeting')->with('books')->with('votes')->find($id);
+      $votes = $ballot->votes;
+      $number_of_votes = sizeOf($votes);
+      $books = $ballot->books;
+      $number_of_books = sizeOf($books);
+      $pref_not_used = FALSE;
+      $tie = FALSE;
+      $first_choices = [];
+      $winner_id = null;
+      $done = FALSE;
+      foreach ($votes as $vote) {
+        array_push($first_choices,$vote["first_choice"]);
+      }
+      $counts = array_count_values($first_choices);
+      arsort($counts);
+      $count_values = array_values($counts);
+      $raw_results = $counts;
+      $round = 0;
+      if ($number_of_books === 2) {
+          $pref_not_used = TRUE;
+          if ($count_values[0] > $count_values[1]) {
+            $count_keys = array_keys($counts);
+            $winner_id = reset($count_keys);
+            $done = TRUE;
+          }
+          else {
+            $done = TRUE;
+            $tie = TRUE;
+          }
+      }
+
+      while (!$done) {
+        $round = $round + 1;
+        $count_values = array_values($counts);
+        if ($count_values[0]/$number_of_votes > .5) {
+          $count_keys = array_keys($counts);
+          $winner_id = reset($count_keys);
+          $done = TRUE;
+        }
+        else {
+          //identify lowest vote getter
+          asort($counts);
+          $count_keys = array_keys($counts);
+          $eliminate = reset($count_keys);
+          //redistribute votes
+          foreach ($votes as $vote) {
+            if ($vote["first_choice"] === $eliminate) {
+              $vote["first_choice"] = $vote["second_choice"];
+              $vote["second_choice"] = $vote["third_choice"];
+              $vote["third_choice"] = $vote["fourth_choice"];
+              $vote["fourth_choice"] = $vote["fifth_choice"];
+              $vote["fifth_choice"] = $vote["sixth_choice"];
+              $vote["sixth_choice"] = $vote["seventh_choice"];
+              $vote["seventh_choice"] = null;
+            }
+            else if ($vote["second_choice"] === $eliminate) {
+              $vote["second_choice"] = $vote["third_choice"];
+              $vote["third_choice"] = $vote["fourth_choice"];
+              $vote["fourth_choice"] = $vote["fifth_choice"];
+              $vote["fifth_choice"] = $vote["sixth_choice"];
+              $vote["sixth_choice"] = $vote["seventh_choice"];
+              $vote["seventh_choice"] = null;
+            }
+            else if ($vote["third_choice"] === $eliminate) {
+              $vote["third_choice"] = $vote["fourth_choice"];
+              $vote["fourth_choice"] = $vote["fifth_choice"];
+              $vote["fifth_choice"] = $vote["sixth_choice"];
+              $vote["sixth_choice"] = $vote["seventh_choice"];
+              $vote["seventh_choice"] = null;
+            }
+            else if ($vote["fourth_choice"] === $eliminate) {
+              $vote["fourth_choice"] = $vote["fifth_choice"];
+              $vote["fifth_choice"] = $vote["sixth_choice"];
+              $vote["sixth_choice"] = $vote["seventh_choice"];
+              $vote["seventh_choice"] = null;
+            }
+            else if ($vote["fifth_choice"] === $eliminate) {
+              $vote["fifth_choice"] = $vote["sixth_choice"];
+              $vote["sixth_choice"] = $vote["seventh_choice"];
+              $vote["seventh_choice"] = null;
+            }
+            else if ($vote["sixth_choice"] === $eliminate) {
+              $vote["sixth_choice"] = $vote["seventh_choice"];
+              $vote["seventh_choice"] = null;
+            }
+            else if ($vote["seventh_choice"] === $eliminate) {
+              $vote["seventh_choice"] = null;
+            }
+            $first_choices = [];
+            foreach ($votes as $vote) {
+              array_push($first_choices,$vote["first_choice"]);
+            }
+            $counts = array_count_values($first_choices);
+            arsort($counts);
+          }
+        }
+      }
+      $chosen_book = \App\Book::find($winner_id);
+      return view('ballots.tally')
+      ->with('chosen_book',$chosen_book)
+      ->with('round',$round)
+      ->with('tie',$tie)
+      ->with('pref_not_used',$pref_not_used)
+      ->with('raw_results',$raw_results)
+      ->with('ballot',$ballot);
     }
 }

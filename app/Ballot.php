@@ -14,12 +14,12 @@ class Ballot extends Model
 
     public function books() {
       #Ballots and Books have Many to Many relationship
-      return $this->belongsToMany('\App\Book')->withTimeStamps();
+      return $this->belongsToMany('\App\Book');
     }
 
     # Votes belong to a ballot. One to Many.
     public function votes() {
-      return $this->hasMany('\App\Vote')->withTimeStamps();
+      return $this->hasMany('\App\Vote');
     }
 
 }
