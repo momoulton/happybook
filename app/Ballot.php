@@ -22,4 +22,12 @@ class Ballot extends Model
       return $this->hasMany('\App\Vote');
     }
 
+    public function user() {
+      return $this->belongsTo('\App\User');
+    }
+
+    public function group() {
+      return $this->belongsTo('\App\Group');
+    }
+
 }

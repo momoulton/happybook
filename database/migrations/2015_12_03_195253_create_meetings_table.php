@@ -27,6 +27,8 @@ class CreateMeetingsTable extends Migration
             $table->text('meeting_details');
             $table->integer('book_id')->unsigned()->nullable();
             $table->foreign('book_id')->references('id')->on('books');
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

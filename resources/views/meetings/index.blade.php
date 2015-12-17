@@ -16,8 +16,6 @@
                 <p>{{ $meeting->meeting_details}}</p>
                 <a href='/meetings/edit/{{$meeting->id}}'>Edit</a> |
                 <a href='/meetings/delete/{{$meeting->id}}'>Delete</a> <br>
-                <a href='/ballots/create/{{$meeting->id}}'>Create Ballot</a> |
-                <a href='/ballots/{{$meeting->id}}'>View Ballot</a><br>
                 @if(isset($meeting->book_id))
                 <p>Book selection: {{$meeting->book->author}}, <i>{{$meeting->book->title}}</i> ({{$meeting->book->year}})</p><br><br>
                 @endif

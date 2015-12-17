@@ -19,7 +19,6 @@ class BallotController extends Controller {
         return view('ballots.index')->with('ballots',$ballots);
     }
 
-
     /**
      * Responds to requests to GET /ballots/create
      */
@@ -240,6 +239,10 @@ class BallotController extends Controller {
       $ballot = \App\Ballot::with('meeting')->with('books')->with('votes')->find($id);
       $votes = $ballot->votes;
       $number_of_votes = sizeOf($votes);
+      if ($number_of_votes === 0) {
+        \Session::flash('flash_message','No one has voted on this ballot yet.');
+        return redirect('/ballots');
+      }
       $books = $ballot->books;
       $number_of_books = sizeOf($books);
       $pref_not_used = FALSE;
@@ -247,6 +250,7 @@ class BallotController extends Controller {
       $first_choices = [];
       $winner_id = null;
       $done = FALSE;
+
       foreach ($votes as $vote) {
         array_push($first_choices,$vote["first_choice"]);
       }
@@ -340,7 +344,16 @@ class BallotController extends Controller {
       ->with('round',$round)
       ->with('tie',$tie)
       ->with('pref_not_used',$pref_not_used)
-      ->with('raw_results',$raw_results)
       ->with('ballot',$ballot);
+    }
+
+    public function postTally(Request $request) {
+      $meeting_id = $request->meeting_id;
+      $book_id = $request->book_id;
+      $meeting = \App\Meeting::find($meeting_id);
+      $meeting->book_id = $book_id;
+      $meeting->save();
+      \Session::flash('flash_message','Your choice has been recorded');
+      return redirect('/meetings');
     }
 }

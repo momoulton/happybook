@@ -29,7 +29,8 @@ class CreateBooksTable extends Migration
           $table->text('description');
           $table->string('purchase_link');
           $table->string('image_link');
-          $table->boolean('already_read');
+          $table->integer('user_id')->unsigned()->nullable();
+          $table->foreign('user_id')->references('id')->on('users');
       });
     }
 

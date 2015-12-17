@@ -71,6 +71,8 @@ Route::post('/ballots/vote', 'BallotController@postVote');
 
 Route::get('/ballots/tally/{id}', 'BallotController@getTally');
 
+Route::post('/ballots/tally', 'BallotController@postTally');
+
 // user authentication
 
 # Show login form
