@@ -17,4 +17,8 @@ class IndexController extends Controller {
         return view('index');
     }
 
+    public function getAbout() {
+        return view('about');
+    }
+
 }
