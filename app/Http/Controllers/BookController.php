@@ -17,6 +17,10 @@ class BookController extends Controller {
     public function getIndex() {
           $user = \Auth::user();
           $group_id = $user->group_id;
+          if ($group_id === NULL) {
+            \Session::flash('flash_message','Join a group first to see its books.');
+            return redirect('/groups');
+          }
           $group = \App\Group::find($group_id);
           $books = \App\Book::where('group_id',$user->group_id)->orderBy('year','ASC')->get();
           return view('books.index')->with('books',$books)->with('group',$group);

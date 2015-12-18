@@ -17,6 +17,10 @@ class BallotController extends Controller {
     public function getIndex() {
         $user = \Auth::user();
         $group_id = $user->group_id;
+        if ($group_id === NULL) {
+          \Session::flash('flash_message','Join a group first to see its ballots.');
+          return redirect('/groups');
+        }
         $group = \App\Group::find($group_id);
         $ballots = \App\Ballot::with('meeting')->with('books')->where('group_id',$user->group_id)->orderBy('id','DESC')->get();
         return view('ballots.index')->with('ballots',$ballots)->with('group',$group);

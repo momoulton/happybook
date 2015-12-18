@@ -28,10 +28,10 @@
           <ul>
               <li><a href="/">Home</a></li>
               @if(Auth::check())
+                <li><a href="/groups">Groups</a></li>
                  <li><a href='/books'>Books</a></li>
                  <li><a href="/meetings">Meetings</a></li>
                  <li><a href="/ballots">Ballots</a></li>
-                 <li><a href="/groups">Groups</a></li>
                  @if(Auth::user()->group_id !== null)
                     <li><a href="/groups/show/{{Auth::user()->group_id}}">My Group</a></li>
                     @endif

@@ -17,6 +17,10 @@ class MeetingController extends Controller {
     public function getIndex() {
       $user = \Auth::user();
       $group_id = $user->group_id;
+      if ($group_id === NULL) {
+        \Session::flash('flash_message','Join a group first to see its meetings.');
+        return redirect('/groups');
+      }
       $group = \App\Group::find($group_id);
       $meetings = \App\Meeting::with('book')->where('group_id',$user->group_id)->orderBy('meeting_date','DESC')->get();
       return view('meetings.index')->with('meetings',$meetings)->with('group',$group);
