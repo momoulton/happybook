@@ -12,7 +12,7 @@ class BallotsTableSeeder extends Seeder
     public function run()
     {
         $user_id = \App\User::where('name', 'LIKE', 'Jill')->pluck('id');
-        $group_id = \App\User::where('name', 'LIKE', 'Happy Book Club')->pluck('id');
+        $group_id = \App\Group::where('name', 'LIKE', 'Happy Book Club')->pluck('id');
         $meeting_id = \App\Meeting::where('meeting_date','=','2015-12-20')->pluck('id');
         DB::table('ballots')->insert([
           'created_at' => Carbon\Carbon::now()->toDateTimeString(),

@@ -34,4 +34,5 @@ class Meeting extends Model
     public function group() {
       return $this->belongsTo('\App\Group');
     }
+
 }

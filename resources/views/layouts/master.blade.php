@@ -22,26 +22,18 @@
         <h1>The Happy Book Club&#8217;s Book Picker</h1>
     </header>
 
-    <section>
-        {{-- Main page content will be yielded here --}}
-        @yield('content')
-    </section>
-
-    <footer>
+    <menu>
       <div>
         <nav>
           <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href='/books'>Books</a></li>
+              <li><a href="/meetings">Meetings</a></li>
+              <li><a href="/ballots">Ballots</a></li>
+              <li><a href="/groups">Groups</a></li>
               @if(Auth::check())
-                 <li><a href="/">Home</a></li>
-                 <li><a href='/books'>Books</a></li>
-                 <li><a href="/meetings">Meetings</a></li>
-                 <li><a href="/ballots">Ballots</a></li>
                  <li><a href="/logout">Logout</a></li>
               @else
-                <li><a href="/">Home</a></li>
-                <li><a href='/books'>Books</a></li>
-                <li><a href="/meetings">Meetings</a></li>
-                <li><a href="/ballots">Ballots</a></li>
                 <li><a href="/login">Login</a></li>
                 <li><a href="/register">Register</a></li>
               @endif
@@ -49,7 +41,13 @@
         </nav>
       </div>
 
-    </footer>
+    </menu>
+
+    <section>
+        {{-- Main page content will be yielded here --}}
+        @yield('content')
+    </section>
+
 
     {{-- Yield any page specific JS files or anything else you might want at the end of the body --}}
     @yield('body')

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BallotsTableSeeder::class);
         $this->call(BallotBookTableSeeder::class);
         $this->call(VotesTableSeeder::class);
+        $this->call(UserGroupTableSeeder::class);
         Model::reguard();
     }
 }

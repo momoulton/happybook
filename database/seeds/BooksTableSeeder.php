@@ -12,7 +12,7 @@ class BooksTableSeeder extends Seeder
     public function run()
     {
         $user_id = \App\User::where('name', 'LIKE', 'Jill')->pluck('id');
-        $group_id = \App\User::where('name', 'LIKE', 'Happy Book Club')->pluck('id');
+        $group_id = \App\Group::where('name', 'LIKE', 'Happy Book Club')->pluck('id');
         DB::table('books')->insert([
           'created_at' => Carbon\Carbon::now()->toDateTimeString(),
           'updated_at' => Carbon\Carbon::now()->toDateTimeString(),

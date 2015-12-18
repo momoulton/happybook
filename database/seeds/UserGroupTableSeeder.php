@@ -37,4 +37,5 @@ class UserGroupTableSeeder extends Seeder
           }
 
       }
+    }
 }

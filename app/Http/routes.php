@@ -73,6 +73,30 @@ Route::get('/ballots/tally/{id}', 'BallotController@getTally');
 
 Route::post('/ballots/tally', 'BallotController@postTally');
 
+// groups routes
+
+Route::get('/groups', 'GroupController@getIndex');
+
+Route::get('/groups/show/{id}', 'GroupController@getShow');
+
+Route::post('/groups/show', 'GroupController@postShow');
+
+Route::get('groups/create', 'GroupController@getCreate');
+
+Route::post('groups/create', 'GroupController@postCreate');
+
+Route::get('/groups/edit/{id}', 'GroupController@getEdit');
+
+Route::post('/groups/edit', 'GroupController@postEdit');
+
+Route::get('/groups/delete/{id}', 'GroupController@getDelete');
+
+Route::get('/groups/do/delete/{id}', 'GroupController@getDoDelete');
+
+Route::get('/groups/join/{id}', 'GroupController@getJoin');
+
+Route::get('/groups/leave/{id}', 'GroupController@getLeave');
+
 // user authentication
 
 # Show login form

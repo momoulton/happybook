@@ -12,7 +12,7 @@ class MeetingsTableSeeder extends Seeder
     public function run()
     {
         $user_id = \App\User::where('name', 'LIKE', 'Jill')->pluck('id');
-        $group_id = \App\User::where('name', 'LIKE', 'Happy Book Club')->pluck('id');
+        $group_id = \App\Group::where('name', 'LIKE', 'Happy Book Club')->pluck('id');
         $book_id = \App\Book::where('title','=','Whose Body?')->pluck('id');
         DB::table('meetings')->insert([
           'created_at' => Carbon\Carbon::now()->toDateTimeString(),
