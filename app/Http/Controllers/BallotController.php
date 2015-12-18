@@ -338,7 +338,7 @@ class BallotController extends Controller {
           }
       }
 
-      while (!$done) {
+      while (!$done AND $round < 10) {
         $round = $round + 1;
         $count_values = array_values($counts);
         if ($count_values[0]/$number_of_votes > .5) {
