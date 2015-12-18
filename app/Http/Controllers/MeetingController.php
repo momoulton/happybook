@@ -15,8 +15,11 @@ class MeetingController extends Controller {
     * Responds to requests to GET /meetings
     */
     public function getIndex() {
-      $meetings = \App\Meeting::with('book')->orderBy('meeting_date','DESC')->get();
-      return view('meetings.index')->with('meetings',$meetings);
+      $user = \Auth::user();
+      $group_id = $user->group_id;
+      $group = \App\Group::find($group_id);
+      $meetings = \App\Meeting::with('book')->where('group_id',$user->group_id)->orderBy('meeting_date','DESC')->get();
+      return view('meetings.index')->with('meetings',$meetings)->with('group',$group);
     }
 
 
@@ -24,7 +27,13 @@ class MeetingController extends Controller {
      * Responds to requests to GET /meetings/create
      */
     public function getCreate() {
+      if (\Auth::user()->group_id === NULL) {
+        \Session::flash('flash_message','Please join a group before adding meetings.');
+        return redirect('/meetings');
+      }
+      else {
         return view('meetings.create');
+      }
     }
 
     /**
@@ -41,6 +50,8 @@ class MeetingController extends Controller {
         $meeting = new \App\Meeting();
         $meeting->meeting_date = $request->meeting_date;
         $meeting->meeting_details = $request->meeting_details;
+        $meeting->user_id = \Auth::user()->id;
+        $meeting->group_id = \Auth::user()->group_id;
         $meeting->save();
         \Session::flash('flash_message','Your meeting was added!');
         return redirect('/meetings');
@@ -51,14 +62,20 @@ class MeetingController extends Controller {
      */
     public function getEdit($id = null) {
       $meeting = \App\Meeting::find($id);
-
+      $user = \Auth::user();
       if(is_null($meeting)) {
         \Session::flash('flash_message','Meeting not found.');
         return redirect('/meetings');
       }
-
-      return view('meetings.edit')
-        ->with(['meeting' => $meeting,]);
+      elseif($meeting->group_id !== $user->group_id)
+      {
+        \Session::flash('flash_message','Meeting not found in your group.');
+        return redirect('/meetings');
+      }
+      else {
+        return view('meetings.edit')
+          ->with(['meeting' => $meeting,]);
+        }
     }
 
     /**
@@ -75,6 +92,8 @@ class MeetingController extends Controller {
         $meeting = \App\Meeting::find($request->id);
         $meeting->meeting_date = $request->meeting_date;
         $meeting->meeting_details = $request->meeting_details;
+        $meeting->user_id = \Auth::user()->id;
+        $meeting->group_id = \Auth::user()->group_id;
         $meeting->save();
         \Session::flash('flash_message','Your meeting was updated!');
         return redirect('/meetings');
@@ -85,9 +104,14 @@ class MeetingController extends Controller {
      */
     public function getDelete($id) {
         $meeting = \App\Meeting::find($id);
-
+        $user = \Auth::user();
         if(is_null($meeting)) {
           \Session::flash('flash_message','Meeting not found.');
+          return redirect('/meetings');
+        }
+        elseif($meeting->group_id !== $user->group_id)
+        {
+          \Session::flash('flash_message','Meeting not found in your group.');
           return redirect('/meetings');
         }
         return view('meetings.delete')->with('meeting',$meeting);
@@ -98,12 +122,20 @@ class MeetingController extends Controller {
        */
       public function getDoDelete($id) {
           $meeting = \App\Meeting::find($id);
+          $user = \Auth::user();
           if(is_null($meeting)) {
             \Session::flash('flash_message','Meeting not found.');
             return redirect('/meetings');
           }
-          $meeting->delete();
-          \Session::flash('flash_message',$meeting->meeting_date.' was deleted.');
-          return redirect('/meetings');
+          elseif($meeting->group_id !== $user->group_id)
+          {
+            \Session::flash('flash_message','Meeting not found in your group.');
+            return redirect('/meetings');
+          }
+          else {
+            $meeting->delete();
+            \Session::flash('flash_message',$meeting->meeting_date.' was deleted.');
+            return redirect('/meetings');
+          }
         }
 }

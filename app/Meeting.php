@@ -19,7 +19,9 @@ class Meeting extends Model
     }
 
     public function getMeetingsForMenu() {
-        $meetings = $this->orderBy('meeting_date','ASC')->get();
+        $user = \Auth::user();
+        $group_id = $user->group_id;
+        $meetings = $this->where('group_id','=',$group_id)->orderBy('meeting_date','ASC')->get();
         $meetingsForMenu = [];
         foreach($meetings as $meeting) {
             $meetingsForMenu[$meeting['id']] = $meeting;

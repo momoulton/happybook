@@ -5,7 +5,7 @@
     <p>Already have an account? <a href='/login'>Login here...</a></p>
 
     <h1>Register</h1>
-
+    <p>Note: at this time, you can only register for one group at a time. If you belong to multiple groups you will need to create multiple user accounts.</p>
     @if(count($errors) > 0)
         <ul class='errors'>
             @foreach ($errors->all() as $error)

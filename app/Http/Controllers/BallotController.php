@@ -15,8 +15,11 @@ class BallotController extends Controller {
     * Responds to requests to GET /ballots
     */
     public function getIndex() {
-        $ballots = \App\Ballot::with('meeting')->with('books')->orderBy('id','DESC')->get();
-        return view('ballots.index')->with('ballots',$ballots);
+        $user = \Auth::user();
+        $group_id = $user->group_id;
+        $group = \App\Group::find($group_id);
+        $ballots = \App\Ballot::with('meeting')->with('books')->where('group_id',$user->group_id)->orderBy('id','DESC')->get();
+        return view('ballots.index')->with('ballots',$ballots)->with('group',$group);
     }
 
     /**
@@ -29,9 +32,23 @@ class BallotController extends Controller {
       $bookModel = new \App\Book();
       $books_for_checkbox = $bookModel->getBooksForMenu();
 
-      return view('ballots.create')
-        ->with('meetings_for_menu',$meetings_for_menu)
-        ->with('books_for_checkbox',$books_for_checkbox);
+      if (\Auth::user()->group_id === NULL) {
+        \Session::flash('flash_message','Please join a group before adding ballots.');
+        return redirect('/ballots');
+      }
+      elseif (sizeOf($meetings_for_menu) === 0) {
+        \Session::flash('flash_message','There are no meetings associated with your group. Add one before creating a ballot.');
+        return redirect('/ballots');
+      }
+      elseif (sizeOf($books_for_checkbox) === 0) {
+        \Session::flash('flash_message','There are no books associated with your group. Add some before creating a ballot.');
+        return redirect('/ballots');
+      }
+      else {
+        return view('ballots.create')
+          ->with('meetings_for_menu',$meetings_for_menu)
+          ->with('books_for_checkbox',$books_for_checkbox);
+        }
     }
 
     /**
@@ -45,10 +62,6 @@ class BallotController extends Controller {
               'books' => 'required',
           ]
         );
-
-        $ballot = new \App\Ballot();
-        $ballot->meeting_id = $request->meeting;
-        $ballot->save();
         if($request->books) {
             $books = $request->books;
         }
@@ -59,7 +72,16 @@ class BallotController extends Controller {
           \Session::flash('flash_message','You may only put up to seven books on a ballot. Please try again.');
           return back();
         }
+        elseif (sizeOf($books) < 2) {
+          \Session::flash('flash_message','You must put at least two books on a ballot. Please try again.');
+          return back();
+        }
         else {
+          $ballot = new \App\Ballot();
+          $ballot->meeting_id = $request->meeting;
+          $ballot->user_id = \Auth::user()->id;
+          $ballot->group_id = \Auth::user()->group_id;
+          $ballot->save();
           $ballot->books()->sync($books);
           \Session::flash('flash_message','Your ballot was created!');
           return redirect('/ballots');
@@ -71,30 +93,36 @@ class BallotController extends Controller {
      */
     public function getEdit($id) {
         $ballot = \App\Ballot::with('books')->with('meeting')->find($id);
-
+        $user = \Auth::user();
         if(is_null($ballot)) {
             \Session::flash('flash_message','Ballot not found.');
             return redirect('\ballots');
         }
-
-        $meetingModel = new \App\Meeting();
-        $meetings_for_menu = $meetingModel->getMeetingsForMenu();
-
-        $bookModel = new \App\Book();
-        $books_for_checkbox = $bookModel->getBooksForMenu();
-
-        $books_for_ballot = [];
-        foreach($ballot->books as $book) {
-          $books_for_ballot[] = $book->id;
+        elseif($ballot->group_id !== $user->group_id)
+        {
+          \Session::flash('flash_message','Ballot not found in your group.');
+          return redirect('/ballots');
         }
+        else {
+          $meetingModel = new \App\Meeting();
+          $meetings_for_menu = $meetingModel->getMeetingsForMenu();
 
-        return view('ballots.edit')
-          ->with([
-            'ballot' => $ballot,
-            'meetings_for_menu' => $meetings_for_menu,
-            'books_for_checkbox' => $books_for_checkbox,
-            'books_for_ballot' => $books_for_ballot,
-          ]);
+          $bookModel = new \App\Book();
+          $books_for_checkbox = $bookModel->getBooksForMenu();
+
+          $books_for_ballot = [];
+          foreach($ballot->books as $book) {
+            $books_for_ballot[] = $book->id;
+          }
+
+          return view('ballots.edit')
+            ->with([
+              'ballot' => $ballot,
+              'meetings_for_menu' => $meetings_for_menu,
+              'books_for_checkbox' => $books_for_checkbox,
+              'books_for_ballot' => $books_for_ballot,
+            ]);
+          }
     }
 
     /**
@@ -108,10 +136,6 @@ class BallotController extends Controller {
               'books' => 'required',
           ]
         );
-
-        $ballot = \App\Ballot::find($request->id);
-        $ballot->meeting_id = $request->meeting;
-        $ballot->save();
         if($request->books) {
             $books = $request->books;
         }
@@ -122,7 +146,16 @@ class BallotController extends Controller {
           \Session::flash('flash_message','You may only put up to seven books on a ballot. Please try again.');
           return back();
         }
+        elseif (sizeOf($books) < 2) {
+          \Session::flash('flash_message','You must put at least two books on a ballot. Please try again.');
+          return back();
+        }
         else {
+          $ballot = \App\Ballot::find($request->id);
+          $ballot->meeting_id = $request->meeting;
+          $ballot->user_id = \Auth::user()->id;
+          $ballot->group_id = \Auth::user()->group_id;
+          $ballot->save();
           $ballot->books()->sync($books);
           \Session::flash('flash_message','Your ballot was updated!');
           return redirect('/ballots');
@@ -134,12 +167,19 @@ class BallotController extends Controller {
      */
     public function getDelete($id) {
         $ballot = \App\Ballot::with('meeting')->with('books')->find($id);
-
+        $user = \Auth::user();
         if(is_null($ballot)) {
           \Session::flash('flash_message','Ballot not found.');
           return redirect('/ballots');
         }
-        return view('ballots.delete')->with('ballot',$ballot);
+        elseif($meeting->group_id !== $user->group_id)
+        {
+          \Session::flash('flash_message','Meeting not found in your group.');
+          return redirect('/meetings');
+        }
+        else {
+          return view('ballots.delete')->with('ballot',$ballot);
+        }
     }
 
     /**
@@ -147,16 +187,24 @@ class BallotController extends Controller {
      */
     public function getDoDelete($id) {
         $ballot = \App\Ballot::find($id);
+        $user = \Auth::user();
         if(is_null($ballot)) {
           \Session::flash('flash_message','Ballot not found.');
           return redirect('/ballots');
         }
-        if($ballot->books()) {
-          $ballot->books()->detach();
+        elseif($meeting->group_id !== $user->group_id)
+        {
+          \Session::flash('flash_message','Meeting not found in your group.');
+          return redirect('/meetings');
         }
-        $ballot->delete();
-        \Session::flash('flash_message','Ballot was deleted.');
-        return redirect('/ballots');
+        else {
+          if($ballot->books()) {
+            $ballot->books()->detach();
+          }
+          $ballot->delete();
+          \Session::flash('flash_message','Ballot was deleted.');
+          return redirect('/ballots');
+        }
     }
 
     /**
@@ -164,6 +212,20 @@ class BallotController extends Controller {
      */
     public function getVote($id) {
         $ballot = \App\Ballot::with('meeting')->with('books')->find($id);
+        $user = \Auth::user();
+        if ($ballot->group_id !== $user->group_id) {
+          \Session::flash('flash_message','This ballot is not in your group. You cannot vote on it.');
+          return redirect('/ballots');
+        }
+        $votes = $ballot->votes;
+        $voters = [];
+        foreach($votes as $vote) {
+          array_push($voters,$vote->user_id);
+        }
+        if (in_array($user->id,$voters)) {
+          \Session::flash('flash_message','You have already voted on this ballot.');
+          return redirect('/ballots');
+        }
         return view('ballots.vote')->with('ballot',$ballot);
     }
 

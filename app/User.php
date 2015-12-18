@@ -49,8 +49,8 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('\App\Meeting');
     }
 
-    public function groups() {
-      return $this->belongsToMany('\App\Group', 'user_group');
+    public function group() {
+      return $this->belongsTo('\App\Group');
     }
 
 }

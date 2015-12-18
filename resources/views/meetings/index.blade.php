@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-  <h2>All Meetings</h2>
+  <h2>{{$group->name}}'s Meetings</h2>
   <p><a href="/meetings/create">Add a new meeting</a></p>
     @if(sizeof($meetings) == 0)
         You have not added any meetings.

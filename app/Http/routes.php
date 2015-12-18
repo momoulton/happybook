@@ -13,90 +13,97 @@
 
 Route::get('/', 'IndexController@getIndex');
 
+Route::get('/about', 'IndexController@getAbout');
+
+Route::group(['middleware' => 'auth'], function() {
 // books routes
 
-Route::get('/books', 'BookController@getIndex');
+  Route::get('/books', 'BookController@getIndex');
 
-Route::get('/books/show/{id}', 'BookController@getShow');
+  Route::get('/books/show/{id}', 'BookController@getShow');
 
-Route::get('books/create', 'BookController@getCreate');
+  Route::get('books/create', 'BookController@getCreate');
 
-Route::post('books/create', 'BookController@postCreate');
+  Route::post('books/create', 'BookController@postCreate');
 
-Route::get('/books/edit/{id}', 'BookController@getEdit');
+  Route::get('/books/edit/{id}', 'BookController@getEdit');
 
-Route::post('/books/edit', 'BookController@postEdit');
+  Route::post('/books/edit', 'BookController@postEdit');
 
-Route::get('/books/delete/{id}', 'BookController@getDelete');
+  Route::get('/books/delete/{id}', 'BookController@getDelete');
 
-Route::get('/books/do/delete/{id}', 'BookController@getDoDelete');
+  Route::get('/books/do/delete/{id}', 'BookController@getDoDelete');
 
-// meetings routes
+  // meetings routes
 
-Route::get('/meetings', 'MeetingController@getIndex');
+  Route::get('/meetings', 'MeetingController@getIndex');
 
-Route::get('/meetings/show/{id}', 'MeetingController@getShow');
+  Route::get('/meetings/show/{id}', 'MeetingController@getShow');
 
-Route::get('meetings/create', 'MeetingController@getCreate');
+  Route::get('meetings/create', 'MeetingController@getCreate');
 
-Route::post('meetings/create', 'MeetingController@postCreate');
+  Route::post('meetings/create', 'MeetingController@postCreate');
 
-Route::get('/meetings/edit/{id}', 'MeetingController@getEdit');
+  Route::get('/meetings/edit/{id}', 'MeetingController@getEdit');
 
-Route::post('/meetings/edit', 'MeetingController@postEdit');
+  Route::post('/meetings/edit', 'MeetingController@postEdit');
 
-Route::get('/meetings/delete/{id}', 'MeetingController@getDelete');
+  Route::get('/meetings/delete/{id}', 'MeetingController@getDelete');
 
-Route::get('/meetings/do/delete/{id}', 'MeetingController@getDoDelete');
+  Route::get('/meetings/do/delete/{id}', 'MeetingController@getDoDelete');
 
-// ballots routes
+  // ballots routes
 
-Route::get('/ballots', 'BallotController@getIndex');
+  Route::get('/ballots', 'BallotController@getIndex');
 
-Route::get('ballots/create', 'BallotController@getCreate');
+  Route::get('ballots/create', 'BallotController@getCreate');
 
-Route::post('ballots/create', 'BallotController@postCreate');
+  Route::post('ballots/create', 'BallotController@postCreate');
 
-Route::get('/ballots/edit/{id}', 'BallotController@getEdit');
+  Route::get('/ballots/edit/{id}', 'BallotController@getEdit');
 
-Route::post('/ballots/edit', 'BallotController@postEdit');
+  Route::post('/ballots/edit', 'BallotController@postEdit');
 
-Route::get('/ballots/delete/{id}', 'BallotController@getDelete');
+  Route::get('/ballots/delete/{id}', 'BallotController@getDelete');
 
-Route::get('/ballots/do/delete/{id}', 'BallotController@getDoDelete');
+  Route::get('/ballots/do/delete/{id}', 'BallotController@getDoDelete');
 
-Route::get('/ballots/vote/{id}', 'BallotController@getVote');
+  Route::get('/ballots/vote/{id}', 'BallotController@getVote');
 
-Route::post('/ballots/vote', 'BallotController@postVote');
+  Route::post('/ballots/vote', 'BallotController@postVote');
 
-Route::get('/ballots/tally/{id}', 'BallotController@getTally');
+  Route::get('/ballots/tally/{id}', 'BallotController@getTally');
 
-Route::post('/ballots/tally', 'BallotController@postTally');
+  Route::post('/ballots/tally', 'BallotController@postTally');
 
-// groups routes
+  // groups routes
 
-Route::get('/groups', 'GroupController@getIndex');
+  Route::get('/groups', 'GroupController@getIndex');
 
-Route::get('/groups/show/{id}', 'GroupController@getShow');
+  Route::get('/groups/show/{id}', 'GroupController@getShow');
 
-Route::post('/groups/show', 'GroupController@postShow');
+  Route::post('/groups/show', 'GroupController@postShow');
 
-Route::get('groups/create', 'GroupController@getCreate');
+  Route::get('groups/create', 'GroupController@getCreate');
 
-Route::post('groups/create', 'GroupController@postCreate');
+  Route::post('groups/create', 'GroupController@postCreate');
 
-Route::get('/groups/edit/{id}', 'GroupController@getEdit');
+  Route::get('/groups/edit/{id}', 'GroupController@getEdit');
 
-Route::post('/groups/edit', 'GroupController@postEdit');
+  Route::post('/groups/edit', 'GroupController@postEdit');
 
-Route::get('/groups/delete/{id}', 'GroupController@getDelete');
+  Route::get('/groups/delete/{id}', 'GroupController@getDelete');
 
-Route::get('/groups/do/delete/{id}', 'GroupController@getDoDelete');
+  Route::get('/groups/do/delete/{id}', 'GroupController@getDoDelete');
 
-Route::get('/groups/join/{id}', 'GroupController@getJoin');
+  Route::get('/groups/join/{id}', 'GroupController@getJoin');
 
-Route::get('/groups/leave/{id}', 'GroupController@getLeave');
+  Route::get('/groups/leave/{id}', 'GroupController@getLeave');
 
+  # Process logout
+  Route::get('/logout', 'Auth\AuthController@getLogout');
+
+});
 // user authentication
 
 # Show login form
@@ -104,9 +111,6 @@ Route::get('/login', 'Auth\AuthController@getLogin');
 
 # Process login form
 Route::post('/login', 'Auth\AuthController@postLogin');
-
-# Process logout
-Route::get('/logout', 'Auth\AuthController@getLogout');
 
 # Show registration form
 Route::get('/register', 'Auth\AuthController@getRegister');

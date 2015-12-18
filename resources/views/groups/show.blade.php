@@ -10,7 +10,7 @@
           <a href='/groups/leave/{{$group->id}}'>Leave</a> |
           <a href='/groups/edit/{{$group->id}}'>Edit</a> |
           <a href='/groups/delete/{{$group->id}}'>Delete</a> <br>
-      @else
+      @elseif(\Auth::user()->group_id === NULL)
           <a href='/groups/join/{{$group->id}}'>Join</a>
       @endif
       <h3>This group has read: </h3>

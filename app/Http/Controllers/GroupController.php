@@ -22,26 +22,20 @@ class GroupController extends Controller {
     /**
     * Responds to requests to GET /groups/show
     */
-    public function getShow($id = null) {
+    public function getShow($id) {
         $group = \App\Group::with('book')->with('users')->find($id);
         $userInGroup = FALSE;
-        if (\Auth::check()) {
-          $user_id = \Auth::user()->id;
-          $group_user_ids = [];
-          foreach ($group->users as $user) {
-            array_push($group_user_ids,$user->id);
-          }
-          if (in_array($user_id, $group_user_ids)) {
+        if (\Auth::user()->group_id === $group->id) {
             $userInGroup = TRUE;
           }
-        }
         return view('groups.show')->with('group',$group)->with('userInGroup', $userInGroup);
     }
     /**
      * Responds to requests to GET /groups/create
      */
     public function getCreate() {
-        return view('groups.create');
+        $current_group = \Auth::user()->group_id;
+        return view('groups.create')->with('current_group',$current_group);
     }
 
     /**
@@ -59,9 +53,9 @@ class GroupController extends Controller {
         $group->name = $request->name;
         $group->save();
         if (isset($request->join)) {
-          $user_id = \Auth::id();
-          $user = \App\User::find($user_id);
-          $user->groups()->attach($group);
+          $user = \Auth::user();
+          $user->group_id = $group->id;
+          $user->save();
         }
         \Session::flash('flash_message','Your group was added!');
         return redirect('/groups');
@@ -72,14 +66,19 @@ class GroupController extends Controller {
      */
     public function getEdit($id = null) {
       $group = \App\Group::find($id);
-
+      $user = \Auth::user();
       if(is_null($group)) {
         \Session::flash('flash_message','Group not found.');
         return redirect('/groups');
       }
-
-      return view('groups.edit')
-        ->with(['group' => $group,]);
+      elseif($user->group_id !== $group->id) {
+        \Session::flash('flash_message','You are not a member of this group so cannot edit it.');
+        return redirect('/groups');
+      }
+      else {
+        return view('groups.edit')
+          ->with('group',$group);
+        }
     }
 
     /**
@@ -105,12 +104,18 @@ class GroupController extends Controller {
      */
     public function getDelete($id) {
         $group = \App\Group::find($id);
-
+        $user = \Auth::user();
         if(is_null($group)) {
           \Session::flash('flash_message','Group not found.');
           return redirect('/groups');
         }
-        return view('groups.delete')->with('group',$group);
+        elseif($user->group_id !== $group->id) {
+          \Session::flash('flash_message','You are not a member of this group so cannot delete it.');
+          return redirect('/groups');
+        }
+        else {
+          return view('groups.delete')->with('group',$group);
+        }
       }
 
       /**
@@ -122,8 +127,10 @@ class GroupController extends Controller {
             \Session::flash('flash_message','Group not found.');
             return redirect('/groups');
           }
-          if($group->users()) {
-            $group->users()->detach();
+          $users = \App\User::where('group_id','=',$group->id)->get();
+          foreach ($users as $user) {
+            $user->group_id = NULL;
+            $user->save();
           }
           $group->delete();
           \Session::flash('flash_message',$group->name.' was deleted.');
@@ -134,18 +141,22 @@ class GroupController extends Controller {
        * Responds to requests to GET /groups/join/{id}
        */
       public function getJoin($id) {
-          $group = \App\Group::find($id);
-          if(\Auth::check()) {
-            $user_id = \Auth::id();
-            $user = \App\User::find($user_id);
-            $user->groups()->attach($group);
-            \Session::flash('flash_message','You joined '.$group->name);
-            return redirect('/groups');
-          }
-          else {
-            \Session::flash('flash_message','You must be logged in to do this.');
-            return redirect('/groups');
-          }
+        $group = \App\Group::find($id);
+        $user = \Auth::user();
+        if($user->group_id === $group->id) {
+          \Session::flash('flash_message','You are already member of this group.');
+          return redirect('/groups');
+        }
+        elseif($user->group_id !== NULL) {
+          \Session::flash('flash_message','You must leave your current group first, or create a new user registration.');
+          return redirect('/groups');
+        }
+        else {
+          $user->group_id = $group->id;
+          $user->save();
+          \Session::flash('flash_message','You joined '.$group->name);
+          return redirect('/groups');
+        }
       }
 
       /**
@@ -153,15 +164,15 @@ class GroupController extends Controller {
        */
       public function getLeave($id) {
         $group = \App\Group::find($id);
-        if(\Auth::check()) {
-          $user_id = \Auth::id();
-          $user = \App\User::find($user_id);
-          $user->groups()->detach($group);
-          \Session::flash('flash_message','You left '.$group->name);
+        $user = \Auth::user();
+        if($user->group_id !== $group->id) {
+          \Session::flash('flash_message','You are not a member of this group so cannot leave it.');
           return redirect('/groups');
         }
         else {
-          \Session::flash('flash_message','You left must be logged in to do this.');
+          $user->group_id = NULL;
+          $user->save();
+          \Session::flash('flash_message','You left '.$group->name);
           return redirect('/groups');
         }
       }

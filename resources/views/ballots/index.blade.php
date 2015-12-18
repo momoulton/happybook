@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-  <h2>All Ballots</h2>
+  <h2>{{$group->name}}'s Ballots</h2>
   <p><a href="/ballots/create">Create a new ballot</a></p>
     @if(sizeof($ballots) == 0)
         You have not created any ballots.

@@ -18,7 +18,9 @@ class Book extends Model
     }
 
     public function getBooksForMenu() {
-        $books = $this->orderBy('year','ASC')->get();
+        $user = \Auth::user();
+        $group_id = $user->group_id;
+        $books = $this->where('group_id','=',$group_id)->orderBy('year','ASC')->get();
         $booksForMenu = [];
         foreach($books as $book) {
             $booksForMenu[$book['id']] = $book;

@@ -71,6 +71,15 @@
               >
       </div>
 
+      <div class='form-group'>
+          <label for='group'>Group:</label>
+          <select name='group' id='group'>
+                @foreach($groups_for_menu as $group)
+                    <option value='{{ $group->id }}'> {{ $group->name }} </option>
+                @endforeach
+            </select>
+      </div>
+
       <button type="submit" class="btn btn-primary">Add book</button>
   </form>
 

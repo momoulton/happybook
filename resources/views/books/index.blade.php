@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-  <h2>All Books</h2>
+  <h2>{{$group->name}}'s Books</h2>
   <p><a href="/books/create">Add a new book</a></p>
     @if(sizeof($books) == 0)
         You have not added any books.
@@ -14,9 +14,7 @@
             <div>
                 <img src='{{ $book->image_link }}'>
                 <h3>{{ $book->author }}, <i>{{ $book->title }}</i> ({{ $book->year }})</h3>
-                <a href='books/show/{{$book->id}}'>Show Details</a> |
-                <a href='/books/edit/{{$book->id}}'>Edit</a> |
-                <a href='/books/delete/{{$book->id}}'>Delete</a> <br><br>
+                <a href='books/show/{{$book->id}}'>Show Details</a><br><br><br>
             </div>
         @endforeach
     @endif
