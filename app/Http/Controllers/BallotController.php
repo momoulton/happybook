@@ -302,6 +302,7 @@ class BallotController extends Controller {
      * Responds to requests to GET /ballots/tally/{id}
      */
     public function getTally($id) {
+      echo 5/10;
       $ballot = \App\Ballot::with('meeting')->with('books')->with('votes')->find($id);
       $votes = $ballot->votes;
       $number_of_votes = sizeOf($votes);
@@ -409,12 +410,12 @@ class BallotController extends Controller {
       {
         $chosen_book = \App\Book::find($winner_id);
       }
-      return view('ballots.tally')
-      ->with('chosen_book',$chosen_book)
-      ->with('round',$round)
-      ->with('tie',$tie)
-      ->with('pref_not_used',$pref_not_used)
-      ->with('ballot',$ballot);
+      // return view('ballots.tally')
+      // ->with('chosen_book',$chosen_book)
+      // ->with('round',$round)
+      // ->with('tie',$tie)
+      // ->with('pref_not_used',$pref_not_used)
+      // ->with('ballot',$ballot);
     }
 
     public function postTally(Request $request) {
