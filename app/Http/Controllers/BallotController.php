@@ -397,16 +397,16 @@ class BallotController extends Controller {
             else if ($vote["seventh_choice"] === $eliminate) {
               $vote["seventh_choice"] = null;
             }
-            $first_choices = [];
-            foreach ($votes as $vote) {
-              array_push($first_choices,$vote["first_choice"]);
-            }
-            $counts = array_count_values($first_choices);
-            arsort($counts);
           }
+          $first_choices = [];
+          foreach ($votes as $vote) {
+            array_push($first_choices,$vote["first_choice"]);
+          }
+          $counts = array_count_values($first_choices);
+          arsort($counts);
+          $print_count = implode(" ",$counts);
+          echo "round: ".$round.", vo: ".$eliminate.", counts: ".$print_count."<br>";
         }
-        $print_count = implode(" ",$counts);
-        echo "round: ".$round.", eliminte: ".$eliminate.", counts: ".$print_count."<br>";
       }
       if ($winner_id !== NULL)
       {
