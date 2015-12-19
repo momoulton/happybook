@@ -305,6 +305,8 @@ class BallotController extends Controller {
       $ballot = \App\Ballot::with('meeting')->with('books')->with('votes')->find($id);
       $votes = $ballot->votes;
       $number_of_votes = sizeOf($votes);
+      $votes_to_win = $number_of_votes/2;
+      echo $votes_to_win;
       if ($number_of_votes === 0) {
         \Session::flash('flash_message','No one has voted on this ballot yet.');
         return redirect('/ballots');
