@@ -356,7 +356,10 @@ class BallotController extends Controller {
           //redistribute votes
           foreach ($votes as $vote) {
             echo "round: ".$round.", eliminate: ".$eliminate.", first!: ".$vote["first_choice"]."<br>";
-            if ($vote["first_choice"] === $eliminate) {
+            if ($vote["first_choice"] === 2) {
+              echo "hello! round ".$round;
+            }
+            else if ($vote["first_choice"] === $eliminate) {
               $vote["first_choice"] = $vote["second_choice"];
               $vote["second_choice"] = $vote["third_choice"];
               $vote["third_choice"] = $vote["fourth_choice"];
