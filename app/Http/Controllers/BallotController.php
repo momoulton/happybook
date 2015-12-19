@@ -302,7 +302,6 @@ class BallotController extends Controller {
      * Responds to requests to GET /ballots/tally/{id}
      */
     public function getTally($id) {
-      echo 5/10;
       $ballot = \App\Ballot::with('meeting')->with('books')->with('votes')->find($id);
       $votes = $ballot->votes;
       $number_of_votes = sizeOf($votes);
@@ -343,7 +342,7 @@ class BallotController extends Controller {
       while (!$done AND $round < 10) {
         $round = $round + 1;
         $count_values = array_values($counts);
-        if ($count_values[0]/$number_of_votes > .5) {
+        if ($count_values[0]/$number_of_votes > 0.5) {
           $count_keys = array_keys($counts);
           $winner_id = reset($count_keys);
           $done = TRUE;
