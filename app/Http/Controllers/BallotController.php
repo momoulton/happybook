@@ -306,7 +306,6 @@ class BallotController extends Controller {
       $votes = $ballot->votes;
       $number_of_votes = sizeOf($votes);
       $votes_to_win = $number_of_votes/2;
-      echo $votes_to_win;
       if ($number_of_votes === 0) {
         \Session::flash('flash_message','No one has voted on this ballot yet.');
         return redirect('/ballots');
@@ -344,7 +343,7 @@ class BallotController extends Controller {
       while (!$done AND $round < 10) {
         $round = $round + 1;
         $count_values = array_values($counts);
-        if ($count_values[0]/$number_of_votes > 0.5) {
+        if ($count_values[0] >= $votes_to_win) {
           $count_keys = array_keys($counts);
           $winner_id = reset($count_keys);
           $done = TRUE;
@@ -411,12 +410,12 @@ class BallotController extends Controller {
       {
         $chosen_book = \App\Book::find($winner_id);
       }
-      // return view('ballots.tally')
-      // ->with('chosen_book',$chosen_book)
-      // ->with('round',$round)
-      // ->with('tie',$tie)
-      // ->with('pref_not_used',$pref_not_used)
-      // ->with('ballot',$ballot);
+      return view('ballots.tally')
+      ->with('chosen_book',$chosen_book)
+      ->with('round',$round)
+      ->with('tie',$tie)
+      ->with('pref_not_used',$pref_not_used)
+      ->with('ballot',$ballot);
     }
 
     public function postTally(Request $request) {
