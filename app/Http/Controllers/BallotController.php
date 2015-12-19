@@ -406,7 +406,7 @@ class BallotController extends Controller {
           }
         }
         $print_count = implode(" ",$counts);
-        echo "round: ".$round.", counts:".$print_count."<br>";
+        echo "round: ".$round.", eliminte: ".$eliminate.", counts: ".$print_count."<br>";
       }
       if ($winner_id !== NULL)
       {
