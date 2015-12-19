@@ -17,6 +17,7 @@
         <p>Note: only two books on ballot. Result was a tie.</p>
     @else
         <p>Number of votes cast: {{sizeOf($ballot->votes)}}</p>
+        winner is {{$chosen_book}}
         <!-- <p>Winning book: {{$chosen_book->author}}, <a href='/books/show/{{$chosen_book->id}}'><i>{{$chosen_book->title}}</i></a> ({{$chosen_book->year}})</p> -->
         <p>Number of rounds: {{$round}}</p>
         <p>Save this as the chosen book for this meeting?
