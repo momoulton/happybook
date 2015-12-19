@@ -408,9 +408,6 @@ class BallotController extends Controller {
       {
         $chosen_book = \App\Book::find($winner_id);
       }
-      else {
-        $chosen_book = "none";
-      }
       return view('ballots.tally')
       ->with('chosen_book',$chosen_book)
       ->with('round',$round)
