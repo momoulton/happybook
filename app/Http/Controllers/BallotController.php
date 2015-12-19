@@ -404,20 +404,18 @@ class BallotController extends Controller {
           }
           $counts = array_count_values($first_choices);
           arsort($counts);
-          $print_count = implode(" ",$counts);
-          echo "round: ".$round.", eliminate: ".$eliminate.", counts: ".$print_count."<br>";
         }
       }
       if ($winner_id !== NULL)
       {
         $chosen_book = \App\Book::find($winner_id);
       }
-      // return view('ballots.tally')
-      // ->with('chosen_book',$chosen_book)
-      // ->with('round',$round)
-      // ->with('tie',$tie)
-      // ->with('pref_not_used',$pref_not_used)
-      // ->with('ballot',$ballot);
+      return view('ballots.tally')
+      ->with('chosen_book',$chosen_book)
+      ->with('round',$round)
+      ->with('tie',$tie)
+      ->with('pref_not_used',$pref_not_used)
+      ->with('ballot',$ballot);
     }
 
     public function postTally(Request $request) {
