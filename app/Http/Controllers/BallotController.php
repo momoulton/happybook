@@ -343,7 +343,7 @@ class BallotController extends Controller {
       while (!$done AND $round < 10) {
         $round = $round + 1;
         $count_values = array_values($counts);
-        if ($count_values[0] >= $votes_to_win) {
+        if ($count_values[0] > $votes_to_win) {
           $count_keys = array_keys($counts);
           $winner_id = reset($count_keys);
           $done = TRUE;
@@ -363,7 +363,6 @@ class BallotController extends Controller {
               $vote["fifth_choice"] = $vote["sixth_choice"];
               $vote["sixth_choice"] = $vote["seventh_choice"];
               $vote["seventh_choice"] = null;
-              echo "round: ".$round.", eliminate: ".$eliminate.", first: ".$vote["first_choice"]."<br>";
             }
             else if ($vote["second_choice"] == $eliminate) {
               $vote["second_choice"] = $vote["third_choice"];
@@ -372,7 +371,6 @@ class BallotController extends Controller {
               $vote["fifth_choice"] = $vote["sixth_choice"];
               $vote["sixth_choice"] = $vote["seventh_choice"];
               $vote["seventh_choice"] = null;
-              echo "round: ".$round.", eliminate: ".$eliminate.", second: ".$vote["second_choice"]."<br>";
             }
             else if ($vote["third_choice"] == $eliminate) {
               $vote["third_choice"] = $vote["fourth_choice"];
@@ -380,29 +378,24 @@ class BallotController extends Controller {
               $vote["fifth_choice"] = $vote["sixth_choice"];
               $vote["sixth_choice"] = $vote["seventh_choice"];
               $vote["seventh_choice"] = null;
-              echo "round: ".$round.", eliminate: ".$eliminate.", third: ".$vote["third_choice"]."<br>";
             }
             else if ($vote["fourth_choice"] == $eliminate) {
               $vote["fourth_choice"] = $vote["fifth_choice"];
               $vote["fifth_choice"] = $vote["sixth_choice"];
               $vote["sixth_choice"] = $vote["seventh_choice"];
               $vote["seventh_choice"] = null;
-              echo "round: ".$round.", eliminate: ".$eliminate.", fourth: ".$vote["fourth_choice"]."<br>";
             }
             else if ($vote["fifth_choice"] == $eliminate) {
               $vote["fifth_choice"] = $vote["sixth_choice"];
               $vote["sixth_choice"] = $vote["seventh_choice"];
               $vote["seventh_choice"] = null;
-              echo "round: ".$round.", eliminate: ".$eliminate.", fifth: ".$vote["fifth_choice"]."<br>";
             }
             else if ($vote["sixth_choice"] == $eliminate) {
               $vote["sixth_choice"] = $vote["seventh_choice"];
               $vote["seventh_choice"] = null;
-              echo "round: ".$round.", eliminate: ".$eliminate.", sixth: ".$vote["sixth_choice"]."<br>";
             }
             else if ($vote["seventh_choice"] == $eliminate) {
               $vote["seventh_choice"] = null;
-              echo "round: ".$round.", eliminate: ".$eliminate.", seventh: ".$vote["seventh_choice"]."<br>";
             }
           }
           $first_choices = [];
@@ -411,8 +404,8 @@ class BallotController extends Controller {
           }
           $counts = array_count_values($first_choices);
           arsort($counts);
-          // $print_count = implode(" ",$counts);
-          // echo "round: ".$round.", eliminate: ".$eliminate.", counts: ".$print_count."<br>";
+          $print_count = implode(" ",$counts);
+          echo "round: ".$round.", eliminate: ".$eliminate.", counts: ".$print_count."<br>";
         }
       }
       if ($winner_id !== NULL)
