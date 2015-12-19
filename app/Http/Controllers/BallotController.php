@@ -355,6 +355,7 @@ class BallotController extends Controller {
           $eliminate = reset($count_keys);
           //redistribute votes
           foreach ($votes as $vote) {
+            echo "round: ".$round.", eliminate: ".$eliminate.", first!: ".$vote["first_choice"]."<br>";
             if ($vote["first_choice"] === $eliminate) {
               $vote["first_choice"] = $vote["second_choice"];
               $vote["second_choice"] = $vote["third_choice"];
