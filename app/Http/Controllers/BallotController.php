@@ -315,6 +315,7 @@ class BallotController extends Controller {
       $tie = FALSE;
       $first_choices = [];
       $winner_id = null;
+      $chosen_book = null;
       $done = FALSE;
 
       foreach ($votes as $vote) {
