@@ -52,7 +52,7 @@
       </div>
 
       <div class='form-group'>
-          <label for='image_link'>Cover (URL; replace generic imagae if desired):</label>
+          <label for='image_link'>Cover (URL; replace generic image if desired):</label>
           <input
               type='text'
               id='image_link'
