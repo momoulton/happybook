@@ -52,12 +52,12 @@
       </div>
 
       <div class='form-group'>
-          <label for='image_link'>Cover (URL):</label>
+          <label for='image_link'>Cover (URL; replace generic imagae if desired):</label>
           <input
               type='text'
               id='image_link'
               name="image_link"
-              value='{{ old('image_link') }}'
+              value='{{ old('image_link','https://upload.wikimedia.org/wikipedia/commons/6/6f/Book_question2.svg') }}'
               >
       </div>
 
@@ -69,15 +69,6 @@
               name='purchase_link'
               value='{{ old('purchase_link') }}'
               >
-      </div>
-
-      <div class='form-group'>
-          <label for='group'>Group:</label>
-          <select name='group' id='group'>
-                @foreach($groups_for_menu as $group)
-                    <option value='{{ $group->id }}'> {{ $group->name }} </option>
-                @endforeach
-            </select>
       </div>
 
       <button type="submit" class="btn btn-primary">Add book</button>
