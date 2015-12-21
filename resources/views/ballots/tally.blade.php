@@ -28,7 +28,7 @@
         <form method='POST' action='/ballots/tally'>
           <input type='hidden' value='{{ csrf_token() }}' name='_token'>
           <input type='hidden' name='meeting_id' value='{{ $ballot->meeting->id }}'>
-          <!-- <input type='hidden' name='book_id' value='{{ $chosen_book->id }}'> -->
+          <input type='hidden' name='book_id' value='{{ $chosen_book->id }}'>
           <button type="submit" class="btn btn-primary">Yes, save now</button>
         </form></p>
         @else
