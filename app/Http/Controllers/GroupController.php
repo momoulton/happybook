@@ -121,21 +121,21 @@ class GroupController extends Controller {
       /**
        * Responds to requests to GET /groups/do/delete/{id}
        */
-      public function getDoDelete($id) {
-          $group = \App\Group::find($id);
-          if(is_null($group)) {
-            \Session::flash('flash_message','Group not found.');
-            return redirect('/groups');
-          }
-          $users = \App\User::where('group_id','=',$group->id)->get();
-          foreach ($users as $user) {
-            $user->group_id = NULL;
-            $user->save();
-          }
-          $group->delete();
-          \Session::flash('flash_message',$group->name.' was deleted.');
-          return redirect('/groups');
-        }
+      // public function getDoDelete($id) {
+      //     $group = \App\Group::find($id);
+      //     if(is_null($group)) {
+      //       \Session::flash('flash_message','Group not found.');
+      //       return redirect('/groups');
+      //     }
+      //     $users = \App\User::where('group_id','=',$group->id)->get();
+      //     foreach ($users as $user) {
+      //       $user->group_id = NULL;
+      //       $user->save();
+      //     }
+      //     $group->delete();
+      //     \Session::flash('flash_message',$group->name.' was deleted.');
+      //     return redirect('/groups');
+      //   }
 
       /**
        * Responds to requests to GET /groups/join/{id}
